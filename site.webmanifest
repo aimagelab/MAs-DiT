@@ -1,0 +1,16 @@
+{
+  "name": "Few Channels Draw The Whole Picture",
+  "short_name": "MAs-DiT",
+  "description": "Project page for massive activations in Diffusion Transformers.",
+  "start_url": "/MAs-DiT/",
+  "display": "standalone",
+  "background_color": "#fbfaf7",
+  "theme_color": "#111110",
+  "icons": [
+    {
+      "src": "assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

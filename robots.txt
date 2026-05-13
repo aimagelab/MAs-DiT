@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://aimagelab.github.io/MAs-DiT/sitemap.xml

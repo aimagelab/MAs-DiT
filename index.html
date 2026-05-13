@@ -1,0 +1,830 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="theme-color" content="#111110" />
+  <title>Few Channels Draw The Whole Picture | MAs-DiT</title>
+  <meta name="description" content="Project page for Few Channels Draw The Whole Picture, a study of massive activations as sparse semantic carrier channels inside modern Diffusion Transformers." />
+  <meta name="author" content="Evelyn Turri, Davide Bucciarelli, Sara Sarto, Lorenzo Baraldi, Marcella Cornia" />
+  <link rel="canonical" href="https://aimagelab.github.io/MAs-DiT/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://aimagelab.github.io/MAs-DiT/" />
+  <meta property="og:title" content="Few Channels Draw The Whole Picture" />
+  <meta property="og:description" content="Revealing massive activations in Diffusion Transformers: critical, spatially organized, and transferable semantic carrier channels." />
+  <meta property="og:image" content="https://aimagelab.github.io/MAs-DiT/assets/og-image.svg" />
+  <meta property="og:site_name" content="MAs-DiT" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Few Channels Draw The Whole Picture" />
+  <meta name="twitter:description" content="A project page on massive activations in Diffusion Transformers." />
+  <meta name="twitter:image" content="https://aimagelab.github.io/MAs-DiT/assets/og-image.svg" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="manifest" href="site.webmanifest" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Libre+Baskerville:wght@400;700&family=Source+Code+Pro:wght@500;700&display=swap" rel="stylesheet" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ScholarlyArticle",
+    "headline": "Few Channels Draw The Whole Picture: Revealing Massive Activations in Diffusion Transformers",
+    "description": "A study of massive activations as sparse prompt-conditioned carrier channels that organize and control semantic information in Diffusion Transformers.",
+    "datePublished": "2026",
+    "author": [
+      {"@type": "Person", "name": "Evelyn Turri"},
+      {"@type": "Person", "name": "Davide Bucciarelli"},
+      {"@type": "Person", "name": "Sara Sarto"},
+      {"@type": "Person", "name": "Lorenzo Baraldi"},
+      {"@type": "Person", "name": "Marcella Cornia"}
+    ],
+    "publisher": {"@type": "CollegeOrUniversity", "name": "University of Modena and Reggio Emilia"},
+    "url": "https://aimagelab.github.io/MAs-DiT/",
+    "keywords": ["Diffusion Transformers", "Massive Activations", "Text-to-Image Generation", "Interpretability", "Semantic Editing"]
+  }
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #fbfaf7;
+      --surface: #ffffff;
+      --surface-2: #f2f0ea;
+      --ink: #111110;
+      --ink-soft: #363633;
+      --muted: #6f7069;
+      --line: #ddd9ce;
+      --orange: #d45c00;
+      --orange-soft: #f7dfcb;
+      --teal: #007078;
+      --teal-soft: #d7eeee;
+      --violet: #52337c;
+      --shadow: 0 22px 60px rgba(17, 17, 16, 0.11);
+      /* --sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; */
+      --sans: "Google Sans", sans-serif;
+      --serif: "Libre Baskerville", Georgia, serif;
+      --mono: "Source Code Pro", "SFMono-Regular", Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        linear-gradient(90deg, rgba(17, 17, 16, 0.035) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(17, 17, 16, 0.03) 1px, transparent 1px),
+        var(--bg);
+      background-size: 44px 44px;
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.65;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; }
+    .skip-link {
+      position: absolute;
+      left: 1rem;
+      top: -4rem;
+      z-index: 20;
+      background: var(--ink);
+      color: #fff;
+      padding: 0.65rem 0.9rem;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: top 0.18s ease;
+    }
+    .skip-link:focus { top: 1rem; }
+    .top-line {
+      height: 5px;
+      background: linear-gradient(90deg, var(--orange), var(--teal), var(--violet));
+    }
+    .wrap {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid rgba(221, 217, 206, 0.86);
+      background: rgba(251, 250, 247, 0.9);
+      backdrop-filter: blur(14px);
+    }
+    .nav-inner {
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      gap: 1.1rem;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      margin-right: 0.5rem;
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .brand-mark {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, var(--orange), transparent 58%),
+        linear-gradient(315deg, var(--teal), var(--violet));
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.34);
+    }
+    .nav a:not(.brand):not(.pill-link) {
+      color: var(--ink-soft);
+      font-size: 0.88rem;
+      font-weight: 650;
+      text-decoration: none;
+    }
+    .nav a:not(.brand):not(.pill-link):hover { color: var(--orange); }
+    .nav-spacer { flex: 1; }
+    .pill-link,
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.48rem;
+      min-height: 42px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      padding: 0.58rem 0.9rem;
+      font-size: 0.88rem;
+      font-weight: 750;
+      line-height: 1;
+      text-decoration: none;
+      transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease;
+    }
+    .pill-link {
+      min-height: 36px;
+      background: var(--ink);
+      color: #fff;
+      padding: 0.5rem 0.78rem;
+    }
+    .button:hover,
+    .pill-link:hover { transform: translateY(-1px); }
+    .button svg,
+    .pill-link svg {
+      width: 17px;
+      height: 17px;
+      flex: 0 0 auto;
+    }
+    .button-primary {
+      background: var(--ink);
+      color: #fff;
+      box-shadow: 0 14px 28px rgba(17, 17, 16, 0.17);
+    }
+    .button-primary:hover { background: var(--orange); }
+    .button-secondary {
+      background: rgba(255, 255, 255, 0.72);
+      border-color: var(--line);
+      color: var(--ink);
+    }
+    .button-secondary:hover {
+      border-color: var(--ink);
+      background: var(--surface);
+    }
+    .hero {
+      padding: 4.7rem 0 3.8rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.06fr) minmax(340px, 0.74fr);
+      gap: 3rem;
+      align-items: center;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      margin: 0 0 1.25rem;
+      border: 1px solid rgba(212, 92, 0, 0.24);
+      border-radius: 999px;
+      background: var(--orange-soft);
+      color: #9d4300;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      padding: 0.3rem 0.68rem;
+      text-transform: uppercase;
+    }
+    h1 {
+      max-width: 850px;
+      margin: 0;
+      font-family: var(--serif);
+      font-size: clamp(2.25rem, 6vw, 5.8rem);
+      font-weight: 700;
+      letter-spacing: 0;
+      line-height: 1.02;
+    }
+    h1 span {
+      color: var(--orange);
+      font-style: italic;
+    }
+    .subtitle {
+      max-width: 760px;
+      margin: 1.45rem 0 0;
+      color: var(--ink-soft);
+      font-family: var(--serif);
+      font-size: clamp(1.05rem, 2vw, 1.26rem);
+      line-height: 1.7;
+    }
+    .authors {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem 1rem;
+      margin-top: 1.9rem;
+      color: var(--ink);
+      font-weight: 650;
+    }
+    .authors sup,
+    .affiliations sup {
+      color: var(--orange);
+      font-size: 0.68em;
+      font-weight: 800;
+    }
+    .affiliations {
+      margin-top: 0.45rem;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 2rem;
+    }
+    .hero-card {
+      position: relative;
+      min-height: 460px;
+      overflow: hidden;
+      border: 1px solid rgba(17, 17, 16, 0.1);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 12% 10%, rgba(212, 92, 0, 0.17), transparent 26%),
+        radial-gradient(circle at 82% 20%, rgba(0, 112, 120, 0.19), transparent 25%),
+        linear-gradient(145deg, #ffffff, #ebe6da);
+      box-shadow: var(--shadow);
+    }
+    .activation-map {
+      position: absolute;
+      inset: 1.2rem;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: repeat(12, 1fr);
+      gap: 5px;
+      transform: perspective(720px) rotateX(58deg) rotateZ(-38deg) translate(-8%, 9%);
+      transform-origin: center;
+    }
+    .cell {
+      min-width: 0;
+      border-radius: 3px;
+      background: rgba(17, 17, 16, 0.09);
+      box-shadow: inset 0 0 0 1px rgba(17, 17, 16, 0.05);
+    }
+    .cell.hot {
+      background: linear-gradient(135deg, #ffb36b, var(--orange));
+      box-shadow: 0 0 24px rgba(212, 92, 0, 0.28);
+    }
+    .cell.cool {
+      background: linear-gradient(135deg, #8cd9dc, var(--teal));
+      box-shadow: 0 0 20px rgba(0, 112, 120, 0.18);
+    }
+    .hero-stat {
+      position: absolute;
+      left: 1.2rem;
+      right: 1.2rem;
+      bottom: 1.2rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.7rem;
+    }
+    .stat {
+      border: 1px solid rgba(255, 255, 255, 0.58);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.78);
+      padding: 0.8rem;
+      backdrop-filter: blur(10px);
+    }
+    .stat strong {
+      display: block;
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: 1.15rem;
+      line-height: 1.1;
+    }
+    .stat span {
+      display: block;
+      margin-top: 0.22rem;
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    main section {
+      padding: 4.6rem 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .section-head {
+      display: grid;
+      grid-template-columns: 180px minmax(0, 1fr);
+      gap: 1.5rem;
+      align-items: start;
+      margin-bottom: 1.6rem;
+    }
+    .kicker {
+      width: max-content;
+      border: 1px solid rgba(0, 112, 120, 0.22);
+      border-radius: 999px;
+      background: var(--teal-soft);
+      color: #005a62;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      padding: 0.25rem 0.58rem;
+      text-transform: uppercase;
+    }
+    h2 {
+      margin: 0;
+      font-family: var(--serif);
+      font-size: clamp(1.55rem, 3vw, 2.45rem);
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+    .lead {
+      max-width: 820px;
+      margin: 0.8rem 0 0;
+      color: var(--ink-soft);
+      font-size: 1.04rem;
+    }
+    .abstract {
+      border-left: 5px solid var(--orange);
+      border-radius: 0 8px 8px 0;
+      background: rgba(255, 255, 255, 0.74);
+      box-shadow: 0 1px 0 rgba(17, 17, 16, 0.04);
+      padding: 1.65rem 1.8rem;
+    }
+    .abstract p {
+      max-width: 92ch;
+      margin: 0 0 1rem;
+      color: var(--ink-soft);
+      font-family: var(--serif);
+    }
+    .abstract p:last-child { margin-bottom: 0; }
+    .abstract strong { color: var(--ink); }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 1.8rem;
+    }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.76);
+      padding: 1.25rem;
+      box-shadow: 0 14px 36px rgba(17, 17, 16, 0.06);
+    }
+    .card-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: var(--ink);
+      color: #fff;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      font-weight: 800;
+    }
+    .card h3 {
+      margin: 1rem 0 0.5rem;
+      font-size: 1rem;
+      letter-spacing: 0;
+      line-height: 1.3;
+    }
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+    .method-panel,
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-top: 1.8rem;
+    }
+    .pipeline {
+      border: 1px solid rgba(17, 17, 16, 0.12);
+      border-radius: 8px;
+      background: var(--ink);
+      color: #fff;
+      padding: 1.3rem;
+    }
+    .step {
+      display: grid;
+      grid-template-columns: 46px 1fr;
+      gap: 0.85rem;
+      align-items: start;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    .step:last-child { border-bottom: 0; }
+    .step-index {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.09);
+      color: #ffb36b;
+      font-family: var(--mono);
+      font-weight: 800;
+    }
+    .step h3 {
+      margin: 0;
+      color: #fff;
+      font-size: 0.92rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .step p {
+      margin: 0.28rem 0 0;
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 0.88rem;
+      line-height: 1.55;
+    }
+    .formula {
+      display: grid;
+      align-content: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.82);
+      padding: 1.4rem;
+    }
+    .formula-code {
+      overflow-x: auto;
+      border-radius: 8px;
+      background: var(--surface-2);
+      padding: 1.1rem;
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: 0.88rem;
+      line-height: 1.7;
+      white-space: nowrap;
+    }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin-top: 1rem;
+    }
+    .chip {
+      border: 1px solid rgba(82, 51, 124, 0.22);
+      border-radius: 999px;
+      background: rgba(82, 51, 124, 0.08);
+      color: var(--violet);
+      font-family: var(--mono);
+      font-size: 0.76rem;
+      font-weight: 800;
+      padding: 0.35rem 0.72rem;
+    }
+    .table-card {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.82);
+    }
+    .table-caption {
+      margin: 0;
+      border-bottom: 1px solid var(--line);
+      background: var(--surface-2);
+      color: var(--muted);
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      padding: 0.72rem 0.85rem;
+      text-transform: uppercase;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+    th,
+    td {
+      border-bottom: 1px solid var(--line);
+      padding: 0.72rem 0.85rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      color: var(--muted);
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    tr:last-child td { border-bottom: 0; }
+    .method-name {
+      color: var(--ink);
+      font-weight: 800;
+    }
+    .highlight {
+      color: var(--orange);
+      font-family: var(--mono);
+      font-weight: 800;
+    }
+    .citation-box {
+      position: relative;
+      margin-top: 1.4rem;
+      border-radius: 8px;
+      background: var(--ink);
+      padding: 1.25rem;
+      color: rgba(255, 255, 255, 0.82);
+    }
+    .citation-box pre {
+      overflow-x: auto;
+      margin: 0;
+      padding: 0;
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      line-height: 1.75;
+      white-space: pre;
+    }
+    .copy-btn {
+      position: absolute;
+      top: 0.8rem;
+      right: 0.8rem;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.09);
+      color: #fff;
+      cursor: pointer;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      padding: 0.45rem 0.65rem;
+      text-transform: uppercase;
+    }
+    .copy-btn:hover { background: rgba(255, 255, 255, 0.18); }
+    footer {
+      padding: 2.5rem 0;
+      background: var(--surface-2);
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    footer a {
+      color: var(--teal);
+      font-weight: 750;
+      text-decoration: none;
+    }
+    footer a:hover { text-decoration: underline; }
+    .reveal {
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+    @media (max-width: 900px) {
+      .hero-grid,
+      .section-head,
+      .method-panel,
+      .results-grid { grid-template-columns: 1fr; }
+      .hero-card { min-height: 360px; }
+      .cards { grid-template-columns: 1fr; }
+      .nav-inner {
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+      .nav-inner::-webkit-scrollbar { display: none; }
+    }
+    @media (max-width: 640px) {
+      .wrap { width: min(100% - 28px, 1120px); }
+      .nav a:not(.brand):not(.pill-link) { display: none; }
+      .hero { padding: 3.2rem 0 2.6rem; }
+      .hero-stat { grid-template-columns: 1fr; }
+      .hero-card { min-height: 420px; }
+      main section { padding: 3.2rem 0; }
+      th,
+      td { padding: 0.62rem; }
+      .citation-box { padding-top: 3.3rem; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="top-line" aria-hidden="true"></div>
+  <nav class="nav" aria-label="Primary navigation">
+    <div class="wrap nav-inner">
+      <a class="brand" href="#top" aria-label="MAs-DiT home"><span class="brand-mark" aria-hidden="true"></span>MAs-DiT</a>
+      <a href="#abstract">Abstract</a>
+      <a href="#findings">Findings</a>
+      <a href="#method">Method</a>
+      <a href="#results">Results</a>
+      <a href="#citation">Citation</a>
+      <span class="nav-spacer"></span>
+      <a class="pill-link" href="https://github.com/aimagelab/MAs-DiT" target="_blank" rel="noreferrer">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5A12 12 0 0 0 8.2 23.9c.6.1.8-.2.8-.6v-2.1c-3.3.7-4-1.4-4-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.4 1 .1-.8.4-1.3.8-1.6-2.6-.3-5.4-1.3-5.4-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.2 11.2 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.4 5.9.4.4.8 1.1.8 2.2v3.3c0 .4.2.7.8.6A12 12 0 0 0 12 .5Z"/></svg>
+        Code
+      </a>
+    </div>
+  </nav>
+
+  <header class="hero" id="top">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow">Preprint / 2026</p>
+        <h1>Few Channels Draw The Whole <span>Picture</span></h1>
+        <p class="subtitle">Revealing Massive Activations in Diffusion Transformers</p>
+        <p class="lead">A sparse subspace that organizes, localizes, and transports semantic information inside modern DiT models: critical, spatially organized, and transferable semantic carrier channels.</p>
+        <div class="authors" aria-label="Authors">
+          <span>Evelyn Turri<sup>*1</sup></span>
+          <span>Davide Bucciarelli<sup>*1,2</sup></span>
+          <span>Sara Sarto<sup>1</sup></span>
+          <span>Lorenzo Baraldi<sup>1</sup></span>
+          <span>Marcella Cornia<sup>1</sup></span>
+        </div>
+        <div class="affiliations"><sup>1</sup> University of Modena and Reggio Emilia, Italy &middot; <sup>2</sup> University of Pisa, Italy &middot; <sup>*</sup> Equal contribution</div>
+        <div class="hero-actions">
+          <a class="button button-primary" href="https://arxiv.org" target="_blank" rel="noreferrer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h5"/></svg>
+            Paper
+          </a>
+          <a class="button button-secondary" href="https://github.com/aimagelab/MAs-DiT" target="_blank" rel="noreferrer">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5A12 12 0 0 0 8.2 23.9c.6.1.8-.2.8-.6v-2.1c-3.3.7-4-1.4-4-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.4 1 .1-.8.4-1.3.8-1.6-2.6-.3-5.4-1.3-5.4-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.2 11.2 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.4 5.9.4.4.8 1.1.8 2.2v3.3c0 .4.2.7.8.6A12 12 0 0 0 12 .5Z"/></svg>
+            Repository
+          </a>
+        </div>
+      </div>
+      <div class="hero-card" aria-label="Abstract visualization of massive activation channels">
+        <div class="activation-map" aria-hidden="true">
+          <span class="cell"></span><span class="cell"></span><span class="cell cool"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell hot"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell cool"></span><span class="cell"></span>
+          <span class="cell"></span><span class="cell hot"></span><span class="cell"></span><span class="cell"></span><span class="cell cool"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell hot"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span>
+          <span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell hot"></span><span class="cell"></span><span class="cell"></span><span class="cell cool"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell hot"></span><span class="cell"></span>
+          <span class="cell cool"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell hot"></span><span class="cell"></span><span class="cell"></span><span class="cell hot"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell cool"></span>
+          <span class="cell"></span><span class="cell"></span><span class="cell hot"></span><span class="cell"></span><span class="cell"></span><span class="cell cool"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell hot"></span><span class="cell"></span><span class="cell"></span>
+          <span class="cell"></span><span class="cell cool"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell hot"></span><span class="cell"></span><span class="cell"></span><span class="cell cool"></span><span class="cell"></span><span class="cell"></span><span class="cell hot"></span>
+          <span class="cell hot"></span><span class="cell"></span><span class="cell"></span><span class="cell cool"></span><span class="cell"></span><span class="cell"></span><span class="cell hot"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell cool"></span><span class="cell"></span>
+          <span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell hot"></span><span class="cell"></span><span class="cell cool"></span><span class="cell"></span><span class="cell"></span><span class="cell hot"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span>
+          <span class="cell cool"></span><span class="cell"></span><span class="cell hot"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell cool"></span><span class="cell"></span><span class="cell"></span><span class="cell hot"></span><span class="cell"></span>
+          <span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell cool"></span><span class="cell hot"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell hot"></span><span class="cell"></span><span class="cell"></span>
+          <span class="cell hot"></span><span class="cell"></span><span class="cell cool"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell hot"></span><span class="cell"></span><span class="cell"></span><span class="cell cool"></span><span class="cell"></span><span class="cell"></span>
+          <span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell hot"></span><span class="cell"></span><span class="cell cool"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell hot"></span><span class="cell"></span><span class="cell"></span>
+        </div>
+        <div class="hero-stat">
+          <div class="stat"><strong>top-k</strong><span>channels</span></div>
+          <div class="stat"><strong>K=2</strong><span>spatial mask</span></div>
+          <div class="stat"><strong>0-shot</strong><span>transport</span></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section id="abstract">
+      <div class="wrap">
+        <div class="section-head"><span class="kicker">Abstract</span><h2>A sparse subspace with outsized semantic control.</h2></div>
+        <div class="abstract reveal">
+          <p>Diffusion Transformers and related flow-based architectures are now among the strongest text-to-image generators, yet the internal mechanisms through which prompts shape image semantics remain poorly understood. We study massive activations: a small subset of hidden-state channels whose responses are consistently much larger than the rest.</p>
+          <p>Despite their sparsity, these few channels effectively draw the whole picture. They are functionally critical, spatially organized, and transferable across prompt-conditioned trajectories.</p>
+          <p>Together, the results recast massive activations not as activation anomalies, but as a <strong>sparse prompt-conditioned carrier subspace</strong> that organizes and controls semantic information in modern DiT models.</p>
+        </div>
+      </div>
+    </section>
+    <section id="findings">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="kicker">Findings</span>
+          <div><h2>Three signals point to one mechanism.</h2><p class="lead">The analysis combines disruption, clustering, and activation transport to expose where semantic information concentrates inside DiT hidden states.</p></div>
+        </div>
+        <div class="cards">
+          <article class="card reveal"><span class="card-number">01</span><h3>Functional criticality</h3><p>Zeroing the top-k massive channels sharply degrades generation quality, while disrupting low-statistic channels has much smaller effect.</p></article>
+          <article class="card reveal"><span class="card-number">02</span><h3>Spatial organization</h3><p>Clustering image-stream tokens restricted to massive channels yields foreground/background masks aligned with salient image regions.</p></article>
+          <article class="card reveal"><span class="card-number">03</span><h3>Semantic transferability</h3><p>Transporting massive activations from one trajectory into another shifts the output toward source semantics while preserving target structure.</p></article>
+        </div>
+      </div>
+    </section>
+    <section id="method">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="kicker">Method</span>
+          <div><h2>Identify, mask, transport, generate.</h2><p class="lead">At each layer, massive activations are selected as top-k channels by absolute channel mean across image tokens, then combined with a spatial mask for targeted activation replacement.</p></div>
+        </div>
+        <div class="method-panel">
+          <div class="pipeline reveal">
+            <div class="step"><span class="step-index">1</span><div><h3>Identify channels</h3><p>Compute absolute channel means and select the top-k massive channels per layer.</p></div></div>
+            <div class="step"><span class="step-index">2</span><div><h3>Estimate spatial mask</h3><p>Restrict image tokens to the selected channels and cluster them into foreground/background regions.</p></div></div>
+            <div class="step"><span class="step-index">3</span><div><h3>Transport activations</h3><p>Inject source activations into the target stream under the joint channel and spatial mask.</p></div></div>
+            <div class="step"><span class="step-index">4</span><div><h3>Decode output</h3><p>Generate the final image with source semantics blended into the target composition.</p></div></div>
+          </div>
+          <div class="formula reveal">
+            <div class="formula-code">T_k^l = top-k_d |mean_tokens(X^l_d)|<br />M = p * m^T<br />X_target = X_target * (1 - M) + X_source * M</div>
+            <div class="chips" aria-label="Analyzed models"><span class="chip">FLUX.1-dev</span><span class="chip">FLUX.1-schnell</span><span class="chip">FLUX.2-klein</span><span class="chip">Qwen-Image</span><span class="chip">SANA 1.5</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="results">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="kicker">Results</span>
+          <div><h2>Training-free control across text and image conditioning.</h2><p class="lead">The page keeps headline results visible for readers and search engines. Replace placeholder values with the final paper numbers when the camera-ready version is available.</p></div>
+        </div>
+        <div class="results-grid">
+          <div class="table-card reveal">
+            <p class="table-caption">Text-conditioned transport</p>
+            <table><thead><tr><th>Method</th><th>Composite</th></tr></thead><tbody><tr><td class="method-name">Prompt2Prompt</td><td>55.2</td></tr><tr><td class="method-name">MAs Transport</td><td>61.4</td></tr><tr><td class="method-name">MAs + Spatial Mask</td><td class="highlight">64.3</td></tr></tbody></table>
+          </div>
+          <div class="table-card reveal">
+            <p class="table-caption">Image-conditioned transport</p>
+            <table><thead><tr><th>Method</th><th>Training-free</th><th>Composite</th></tr></thead><tbody><tr><td class="method-name">IP-Adapter</td><td>Yes</td><td>21.9</td></tr><tr><td class="method-name">Qwen-Image-Edit</td><td>Yes</td><td>65.5</td></tr><tr><td class="method-name">MAs Transport</td><td class="highlight">Yes</td><td class="highlight">66.8</td></tr></tbody></table>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="citation">
+      <div class="wrap">
+        <div class="section-head"><span class="kicker">Citation</span><div><h2>Cite this work.</h2><p class="lead">Use the BibTeX entry below until the final arXiv identifier is available.</p></div></div>
+        <div class="citation-box reveal">
+          <button class="copy-btn" type="button" data-copy="bibtex">Copy</button>
+          <pre id="bibtex"></pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-inner">
+      <span>University of Modena and Reggio Emilia &middot; University of Pisa &middot; 2026</span>
+      <span><a href="https://github.com/aimagelab/MAs-DiT" target="_blank" rel="noreferrer">GitHub repository</a></span>
+    </div>
+  </footer>
+
+  <script>
+    const copyButton = document.querySelector('[data-copy="bibtex"]');
+    if (copyButton) {
+      copyButton.addEventListener('click', async () => {
+        const bibtex = document.getElementById('bibtex').textContent;
+        try {
+          await navigator.clipboard.writeText(bibtex);
+          copyButton.textContent = 'Copied';
+          setTimeout(() => { copyButton.textContent = 'Copy'; }, 1600);
+        } catch {
+          copyButton.textContent = 'Select';
+        }
+      });
+    }
+    const revealItems = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      revealItems.forEach((item) => observer.observe(item));
+    } else {
+      revealItems.forEach((item) => item.classList.add('visible'));
+    }
+  </script>
+</body>
+</html>
