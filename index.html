@@ -657,12 +657,11 @@
       <a href="#abstract">Abstract</a>
       <a href="#findings">Findings</a>
       <a href="#method">Method</a>
-      <a href="#results">Results</a>
       <a href="#citation">Citation</a>
       <span class="nav-spacer"></span>
-      <a class="pill-link" href="https://github.com/aimagelab/MAs-DiT" target="_blank" rel="noreferrer">
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5A12 12 0 0 0 8.2 23.9c.6.1.8-.2.8-.6v-2.1c-3.3.7-4-1.4-4-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.4 1 .1-.8.4-1.3.8-1.6-2.6-.3-5.4-1.3-5.4-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.2 11.2 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.4 5.9.4.4.8 1.1.8 2.2v3.3c0 .4.2.7.8.6A12 12 0 0 0 12 .5Z"/></svg>
-        Code
+      <a class="pill-link" href="https://arxiv.org/abs/2605.13974" target="_blank" rel="noreferrer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h5"/></svg>
+        Paper
       </a>
     </div>
   </nav>
@@ -683,7 +682,7 @@
         </div>
         <div class="affiliations"><sup>1</sup> University of Modena and Reggio Emilia, Italy &middot; <sup>2</sup> University of Pisa, Italy &middot; <sup>*</sup> Equal contribution</div>
         <div class="hero-actions">
-          <a class="button button-primary" href="https://arxiv.org" target="_blank" rel="noreferrer">
+          <a class="button button-primary" href="https://arxiv.org/abs/2605.13974v1" target="_blank" rel="noreferrer">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h5"/></svg>
             Paper
           </a>
@@ -755,36 +754,22 @@
             <div class="step"><span class="step-index">4</span><div><h3>Decode output</h3><p>Generate the final image with source semantics blended into the target composition.</p></div></div>
           </div>
           <div class="formula reveal">
-            <div class="formula-code">T_k^l = top-k_d |mean_tokens(X^l_d)|<br />M = p * m^T<br />X_target = X_target * (1 - M) + X_source * M</div>
             <div class="chips" aria-label="Analyzed models"><span class="chip">FLUX.1-dev</span><span class="chip">FLUX.1-schnell</span><span class="chip">FLUX.2-klein</span><span class="chip">Qwen-Image</span><span class="chip">SANA 1.5</span></div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section id="results">
-      <div class="wrap">
-        <div class="section-head">
-          <span class="kicker">Results</span>
-          <div><h2>Training-free control across text and image conditioning.</h2><p class="lead">The page keeps headline results visible for readers and search engines. Replace placeholder values with the final paper numbers when the camera-ready version is available.</p></div>
-        </div>
-        <div class="results-grid">
-          <div class="table-card reveal">
-            <p class="table-caption">Text-conditioned transport</p>
-            <table><thead><tr><th>Method</th><th>Composite</th></tr></thead><tbody><tr><td class="method-name">Prompt2Prompt</td><td>55.2</td></tr><tr><td class="method-name">MAs Transport</td><td>61.4</td></tr><tr><td class="method-name">MAs + Spatial Mask</td><td class="highlight">64.3</td></tr></tbody></table>
-          </div>
-          <div class="table-card reveal">
-            <p class="table-caption">Image-conditioned transport</p>
-            <table><thead><tr><th>Method</th><th>Training-free</th><th>Composite</th></tr></thead><tbody><tr><td class="method-name">IP-Adapter</td><td>Yes</td><td>21.9</td></tr><tr><td class="method-name">Qwen-Image-Edit</td><td>Yes</td><td>65.5</td></tr><tr><td class="method-name">MAs Transport</td><td class="highlight">Yes</td><td class="highlight">66.8</td></tr></tbody></table>
           </div>
         </div>
       </div>
     </section>
     <section id="citation">
       <div class="wrap">
-        <div class="section-head"><span class="kicker">Citation</span><div><h2>Cite this work.</h2><p class="lead">Use the BibTeX entry below until the final arXiv identifier is available.</p></div></div>
+        <div class="section-head"><span class="kicker">Citation</span><div><h2>Cite this work.</h2><p class="lead">Use the BibTeX entry below to cite the arXiv preprint.</p></div></div>
         <div class="citation-box reveal">
           <button class="copy-btn" type="button" data-copy="bibtex">Copy</button>
-          <pre id="bibtex"></pre>
+          <pre id="bibtex">@article{turri2026channelsdrawpicturerevealing,
+      title={Few Channels Draw The Whole Picture: Revealing Massive Activations in Diffusion Transformers},
+      author={Evelyn Turri and Davide Bucciarelli and Sara Sarto and Lorenzo Baraldi and Marcella Cornia},
+      year={2026},
+      journal={arXiv preprint arXiv:2605.13974},
+}</pre>
         </div>
       </div>
     </section>
@@ -792,7 +777,7 @@
 
   <footer>
     <div class="wrap footer-inner">
-      <span>University of Modena and Reggio Emilia &middot; University of Pisa &middot; 2026</span>
+      <span>University of Modena and Reggio Emilia &middot; AImageLab &middot; 2026</span>
       <span><a href="https://github.com/aimagelab/MAs-DiT" target="_blank" rel="noreferrer">GitHub repository</a></span>
     </div>
   </footer>
