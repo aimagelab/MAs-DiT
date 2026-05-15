@@ -19,7 +19,7 @@
   <meta name="twitter:title" content="Few Channels Draw The Whole Picture" />
   <meta name="twitter:description" content="A project page on massive activations in Diffusion Transformers." />
   <meta name="twitter:image" content="https://aimagelab.github.io/MAs-DiT/assets/og-image.svg" />
-  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="icon" type="image/png" href="static/images/logo.png" />
   <link rel="manifest" href="site.webmanifest" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -59,6 +59,9 @@
       --teal-soft: #d7eeee;
       --violet: #52337c;
       --shadow: 0 22px 60px rgba(17, 17, 16, 0.11);
+      --gradient-x: 50%;
+      --gradient-y: 42%;
+      --gradient-angle: 118deg;
       /* --sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; */
       --sans: "Google Sans", sans-serif;
       --serif: "Libre Baskerville", Georgia, serif;
@@ -69,10 +72,12 @@
     body {
       margin: 0;
       background:
-        linear-gradient(90deg, rgba(17, 17, 16, 0.035) 1px, transparent 1px),
-        linear-gradient(0deg, rgba(17, 17, 16, 0.03) 1px, transparent 1px),
-        var(--bg);
-      background-size: 44px 44px;
+        radial-gradient(circle at var(--gradient-x) var(--gradient-y), rgba(255, 255, 255, 0.98) 0 13%, rgba(255, 255, 255, 0.78) 24%, rgba(255, 255, 255, 0) 43%),
+        linear-gradient(var(--gradient-angle), rgba(245, 172, 69, 0.5) 0%, rgba(255, 255, 255, 0.92) 48%, rgba(255, 183, 195, 0.72) 100%);
+      background-attachment: fixed;
+      background-color: #fff8f5;
+      background-position: center;
+      background-size: 170% 170%, 150% 150%;
       color: var(--ink);
       font-family: var(--sans);
       font-size: 16px;
@@ -96,7 +101,7 @@
     .skip-link:focus { top: 1rem; }
     .top-line {
       height: 5px;
-      background: linear-gradient(90deg, var(--orange), var(--teal), var(--violet));
+      background: linear-gradient(90deg, #f5ac45, #ffb7c3);
     }
     .wrap {
       width: min(1120px, calc(100% - 40px));
@@ -107,7 +112,7 @@
       top: 0;
       z-index: 10;
       border-bottom: 1px solid rgba(221, 217, 206, 0.86);
-      background: rgba(251, 250, 247, 0.9);
+      background: rgba(255, 250, 248, 0.78);
       backdrop-filter: blur(14px);
     }
     .nav-inner {
@@ -132,11 +137,9 @@
     .brand-mark {
       width: 28px;
       height: 28px;
-      border-radius: 8px;
-      background:
-        linear-gradient(135deg, var(--orange), transparent 58%),
-        linear-gradient(315deg, var(--teal), var(--violet));
-      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.34);
+      border-radius: 7px;
+      object-fit: contain;
+      box-shadow: 0 1px 4px rgba(17, 17, 16, 0.12);
     }
     .nav a:not(.brand):not(.pill-link) {
       color: var(--ink-soft);
@@ -602,6 +605,12 @@
       text-decoration: none;
     }
     footer a:hover { text-decoration: underline; }
+    .back-to-top {
+      color: var(--ink);
+    }
+    .back-to-top:hover {
+      text-decoration: none;
+    }
     .reveal {
       opacity: 0;
       transform: translateY(14px);
@@ -653,10 +662,11 @@
   <div class="top-line" aria-hidden="true"></div>
   <nav class="nav" aria-label="Primary navigation">
     <div class="wrap nav-inner">
-      <a class="brand" href="#top" aria-label="MAs-DiT home"><span class="brand-mark" aria-hidden="true"></span>MAs-DiT</a>
+      <a class="brand" href="#top" aria-label="MAs-DiT home"><img class="brand-mark" src="static/images/logo.png" alt="" aria-hidden="true" />MAs-DiT</a>
       <a href="#abstract">Abstract</a>
       <a href="#findings">Findings</a>
-      <a href="#method">Method</a>
+      <a href="#approach">Approach</a>
+      <a href="#takeaways">Takeaways</a>
       <a href="#citation">Citation</a>
       <span class="nav-spacer"></span>
       <a class="pill-link" href="https://arxiv.org/abs/2605.13974" target="_blank" rel="noreferrer">
@@ -740,10 +750,10 @@
         </div>
       </div>
     </section>
-    <section id="method">
+    <section id="approach">
       <div class="wrap">
         <div class="section-head">
-          <span class="kicker">Method</span>
+          <span class="kicker">Approach</span>
           <div><h2>Identify, mask, transport, generate.</h2><p class="lead">At each layer, massive activations are selected as top-k channels by absolute channel mean across image tokens, then combined with a spatial mask for targeted activation replacement.</p></div>
         </div>
         <div class="method-panel">
@@ -756,6 +766,19 @@
           <div class="formula reveal">
             <div class="chips" aria-label="Analyzed models"><span class="chip">FLUX.1-dev</span><span class="chip">FLUX.1-schnell</span><span class="chip">FLUX.2-klein</span><span class="chip">Qwen-Image</span><span class="chip">SANA 1.5</span></div>
           </div>
+        </div>
+      </div>
+    </section>
+    <section id="takeaways">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="kicker">Takeaways</span>
+          <div><h2>What massive activations make visible.</h2><p class="lead">A compact set of channels carries a surprising amount of semantic control through the generation process.</p></div>
+        </div>
+        <div class="cards">
+          <article class="card reveal"><span class="card-number">01</span><h3>A few channels control generation.</h3><p>Massive Activations (MAs) are sparse but critical hidden channels that strongly influence image quality and prompt alignment in Diffusion Transformers.</p></article>
+          <article class="card reveal"><span class="card-number">02</span><h3>MAs reveal structured semantics.</h3><p>Top-k activation channels naturally align with meaningful spatial regions like foreground objects and salient scene elements.</p></article>
+          <article class="card reveal"><span class="card-number">03</span><h3>MAs enable controllable semantic transport.</h3><p>Transplanting massive activations across generations produces localized semantic transfer and coherent prompt composition without additional training.</p></article>
         </div>
       </div>
     </section>
@@ -779,6 +802,10 @@
     <div class="wrap footer-inner">
       <span>University of Modena and Reggio Emilia &middot; AImageLab &middot; 2026</span>
       <span><a href="https://github.com/aimagelab/MAs-DiT" target="_blank" rel="noreferrer">GitHub repository</a></span>
+      <a class="button button-secondary back-to-top" href="#top" aria-label="Back to top">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg>
+        Back to top
+      </a>
     </div>
   </footer>
 
@@ -809,6 +836,33 @@
       revealItems.forEach((item) => observer.observe(item));
     } else {
       revealItems.forEach((item) => item.classList.add('visible'));
+    }
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (!prefersReducedMotion.matches) {
+      const root = document.documentElement;
+      let ticking = false;
+
+      const moveGradient = () => {
+        const scrollProgress = window.scrollY / Math.max(1, document.body.scrollHeight - window.innerHeight);
+        const driftX = Math.sin(scrollProgress * 10.7) * 17 + Math.sin(scrollProgress * 31.3) * 5;
+        const driftY = Math.cos(scrollProgress * 12.9) * 14 + Math.sin(scrollProgress * 24.1) * 6;
+        const angle = 112 + Math.sin(scrollProgress * 8.3) * 13 + Math.cos(scrollProgress * 18.5) * 6;
+
+        root.style.setProperty('--gradient-x', `${50 + driftX}%`);
+        root.style.setProperty('--gradient-y', `${42 + driftY}%`);
+        root.style.setProperty('--gradient-angle', `${angle}deg`);
+        ticking = false;
+      };
+
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          window.requestAnimationFrame(moveGradient);
+          ticking = true;
+        }
+      }, { passive: true });
+
+      moveGradient();
     }
   </script>
 </body>
